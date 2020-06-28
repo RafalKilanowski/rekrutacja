@@ -1,0 +1,12 @@
+package com.recruitment.domain;
+
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccountRepository extends JpaRepository<Account, String> {
+
+  boolean existsAccountByPesel(String pesel);
+
+  Optional<Account> findAccountByPesel(String pesel);
+
+}

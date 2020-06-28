@@ -1,0 +1,1 @@
+i know, lack of swagger + spring actuator + no oauth2 +  lack of some integration tests = sorry, not enough time at weekend :(
