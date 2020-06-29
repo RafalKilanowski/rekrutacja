@@ -2,13 +2,17 @@ package com.recruitment.domain.view;
 
 import com.recruitment.shared.model.Currency;
 import java.math.BigDecimal;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class SubAccountView {
 
-  private final Currency currency;
+  private Currency currency;
 
-  private final BigDecimal value;
+  private BigDecimal value;
 
 }

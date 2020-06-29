@@ -26,10 +26,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(classes = TestConfiguration.class)
 class CreateUserAccountControllerTest {
 
-  public static final String PESEL = "89030239291";
-  public static final String NAME = "name";
-  public static final String SURNAME = "surname";
-  public static final BigDecimal ACCOUNT_BALANCE_PLN = BigDecimal.valueOf(1000);
+  private static final String PESEL = "89030239291";
+  private static final String NAME = "name";
+  private static final String SURNAME = "surname";
+  private static final BigDecimal ACCOUNT_BALANCE_PLN = BigDecimal.valueOf(1000, 2);
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -47,20 +48,19 @@ class CreateUserAccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.post("/account").content(dtoAsString).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().is(201));
 
     //then
-    //TODO problem with jackson and all args contructor - lack of time
-//    String response = mockMvc.perform(MockMvcRequestBuilders.get("/account/" + PESEL)).andReturn().getResponse().getContentAsString();
-//    AccountView accountView = objectMapper.readValue(response, AccountView.class);
-//
-//    Assertions.assertEquals(NAME, accountView.getName());
-//    Assertions.assertEquals(SURNAME, accountView.getSurname());
-//    Assertions.assertEquals(PESEL, accountView.getPesel());
-//    Assertions.assertEquals(2, accountView.getSubAccount().size());
-//
-//    SubAccountView plnSubAccount = accountView.getSubAccount().stream().filter(sa -> sa.getCurrency().equals(Currency.PLN)).findFirst().get();
-//    assertEquals(ACCOUNT_BALANCE_PLN, plnSubAccount.getValue());
-//
-//    SubAccountView usdSubAccount = accountView.getSubAccount().stream().filter(sa -> sa.getCurrency().equals(Currency.USD)).findFirst().get();
-//    assertEquals(BigDecimal.ZERO, usdSubAccount.getValue());
+    String response = mockMvc.perform(MockMvcRequestBuilders.get("/account/" + PESEL)).andReturn().getResponse().getContentAsString();
+    AccountView accountView = objectMapper.readValue(response, AccountView.class);
+
+    Assertions.assertEquals(NAME, accountView.getName());
+    Assertions.assertEquals(SURNAME, accountView.getSurname());
+    Assertions.assertEquals(PESEL, accountView.getPesel());
+    Assertions.assertEquals(2, accountView.getSubAccount().size());
+
+    SubAccountView plnSubAccount = accountView.getSubAccount().stream().filter(sa -> sa.getCurrency().equals(Currency.PLN)).findFirst().get();
+    assertEquals(ACCOUNT_BALANCE_PLN, plnSubAccount.getValue());
+
+    SubAccountView usdSubAccount = accountView.getSubAccount().stream().filter(sa -> sa.getCurrency().equals(Currency.USD)).findFirst().get();
+    assertEquals(BigDecimal.valueOf(0, 2), usdSubAccount.getValue());
 
   }
 
